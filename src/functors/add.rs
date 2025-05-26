@@ -5,6 +5,12 @@ pub struct Add {
     
 } 
 
+impl Add {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
+
 impl Functor for Add {
     fn get_operand_types(&self) -> Vec<OperandType> {
         vec![OperandType::Float, OperandType::Int]

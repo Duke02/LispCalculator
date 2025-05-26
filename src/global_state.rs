@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use crate::operand::Operand;
 
+#[derive(Debug, Clone)]
 pub struct GlobalState {
     variables: HashMap<String, Operand>,
 }

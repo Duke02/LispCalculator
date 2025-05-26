@@ -36,4 +36,10 @@ pub trait Functor {
             Ok(self.operate(operands))
         }
     }
+    
+    fn can_operate(&self, statement: &str) -> bool {
+        // Make sure first word in statement is the operator.
+        // Assumes first character is ( and is unneeded. 
+        statement[1..].split(" ").collect::<Vec<_>>()[0] == self.get_operator()
+    }
 }

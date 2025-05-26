@@ -1,3 +1,5 @@
+use std::str::FromStr;
+use crate::result::CalcError;
 
 #[derive(PartialEq, Clone, Debug)]
 pub enum OperandType {
@@ -75,12 +77,47 @@ impl Operand {
     }
 }
 
+impl ToString for Operand {
+    fn to_string(&self) -> String {
+        match self {
+            Operand::Float(f) => f.to_string(),
+            Operand::Int(i) => i.to_string(),
+            Operand::Bool(b) => b.to_string(),
+        }
+    }
+}
+
 impl From<Operand> for OperandType {
     fn from(o: Operand) -> Self {
         match o {
             Operand::Float(_) => OperandType::Float,
             Operand::Int(_) => OperandType::Int,
             Operand::Bool(_) => OperandType::Bool,
+        }
+    }
+}
+
+impl TryFrom<String> for Operand {
+    type Error = CalcError;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        Operand::try_from(value.as_str())
+    }
+}
+
+impl TryFrom<&str> for Operand {
+    type Error = CalcError;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        let v = value.trim();
+        if let Ok(i) = i64::from_str(v) {
+            Ok(Operand::Int(i))
+        } else if let Ok(f) = f64::from_str(v) {
+            Ok(Operand::Float(f))
+        } else if let Ok(b) = bool::from_str(v) {
+            Ok(Operand::Bool(b))
+        } else {
+            Err(CalcError::ParseError("Invalid operand".to_string()))
         }
     }
 }

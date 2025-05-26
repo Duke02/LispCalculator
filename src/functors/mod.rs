@@ -1,4 +1,4 @@
 pub mod functor;
-mod add;
+pub mod add;
 
 pub use functor::Functor;
