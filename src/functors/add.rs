@@ -1,6 +1,7 @@
 use crate::functors::Functor;
 use crate::operand::{Operand, OperandType};
 
+#[derive(Debug)]
 pub struct Add {
     
 } 

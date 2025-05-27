@@ -3,7 +3,7 @@ use crate::functors::add::Add;
 use crate::functors::Functor;
 use crate::global_state::GlobalState;
 use crate::operand::Operand;
-use crate::result::CalcResult;
+use crate::result::{CalcError, CalcResult};
 
 pub struct Calculator {
     global_state: GlobalState,
@@ -66,7 +66,7 @@ impl Calculator {
         statement[1..statement.len() - 1].split(" ").filter_map(|po| Operand::try_from(po).ok()).collect::<Vec<_>>()
     }
 
-    pub fn process(&mut self, in_str: &str) -> Operand {
+    pub fn process(&mut self, in_str: &str) -> CalcResult<Operand> {
         let mut s = in_str.to_string();
         while let Some((statement, start, end)) = self.get_innermost_statement(s.as_str()) {
             if let Some(functor) = self.get_functor(statement.as_str()) {
@@ -75,12 +75,12 @@ impl Calculator {
                     Ok(result) => {
                         s = s.replace(statement.as_str(), result.to_string().as_str());
                     },
-                    Err(e) => panic!("Could not perform operation due to error {e}"),
+                    Err(e) => return Err(e),
                 }
             } else {
-                panic!("Unsupported operator in statement {statement}")
+                return Err(CalcError::InvalidOperator {provided: statement});
             }
         }
-        Operand::try_from(s.as_str()).expect("We ran into an error that we didn't catch.")
+        Ok(Operand::try_from(s.as_str())?)
     }
 }

@@ -9,6 +9,7 @@ pub enum CalcError {
     },
     IncorrectNumOfOperands {provided: u8, required: u8},
     ParseError(String),
+    InvalidOperator {provided: String},
 }
 
 impl Display for CalcError {
