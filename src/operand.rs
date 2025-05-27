@@ -1,3 +1,4 @@
+use std::fmt::Display;
 use std::str::FromStr;
 use crate::result::CalcError;
 
@@ -21,6 +22,7 @@ impl OperandType {
             // Bool has the least priority 
             OperandType::Bool => match other {
                 OperandType::Bool => OperandType::Bool,
+                OperandType::Int => OperandType::Int,
                 _ => OperandType::Float,
             }
         }
@@ -77,13 +79,14 @@ impl Operand {
     }
 }
 
-impl ToString for Operand {
-    fn to_string(&self) -> String {
-        match self {
+impl Display for Operand {
+    fn fmt(&self, f1: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let str = match self {
             Operand::Float(f) => f.to_string(),
             Operand::Int(i) => i.to_string(),
             Operand::Bool(b) => b.to_string(),
-        }
+        };
+        write!(f1, "{}", str)
     }
 }
 

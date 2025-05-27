@@ -8,8 +8,11 @@ pub mod calculator;
 
 fn main() {
     let mut calc = Calculator::new();
-    
-    let three = calc.process("(+ 1 2)");
 
-    println!("Calculator computed {three:?}");
+    let quick_test_strings = vec!["(+ 1 2)", "(+ 1.1 2.1)", "(+ 1.0 2.1)", "(+ true false)"];
+
+    for s in quick_test_strings {
+        let out = calc.process(s);
+        println!("{:?}", out);
+    }
 }

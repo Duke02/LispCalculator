@@ -1,4 +1,3 @@
-use std::ops::Deref;
 use crate::functors::add::Add;
 use crate::functors::Functor;
 use crate::global_state::GlobalState;
