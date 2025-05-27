@@ -2,6 +2,7 @@ use std::fmt::Display;
 use std::str::FromStr;
 use crate::result::CalcError;
 
+/// The data types of operands.
 #[derive(PartialEq, Clone, Debug)]
 pub enum OperandType {
     Float,
@@ -10,6 +11,18 @@ pub enum OperandType {
 }
 
 impl OperandType {
+    /// Determines the correct data type between self and other to up-cast to.
+    ///
+    /// Up-casting basically means resolving a difference between two data types such that
+    /// they are the same. Currently, Float is King, so if you provide a bool/int with a float,
+    /// the up-casted data type will be a float. In order of priority, Float is King, Int is second
+    /// priority, and Bool is least priority.
+    ///
+    /// # Arguments
+    /// * other: The other data type that we need to compare self to.
+    ///
+    /// # Returns
+    /// The data type to upcast self and other to.
     pub fn resulting_type(&self, other: &OperandType) -> OperandType {
         match self {
             // Float is King
@@ -29,7 +42,7 @@ impl OperandType {
     }
 }
 
-
+/// The actual operands of a statement that we need to evaluate.
 #[derive(PartialEq, Clone, Debug)]
 pub enum Operand {
     Float(f64),
@@ -49,7 +62,8 @@ impl Operand {
     pub fn new_from_bool(bool: bool) -> Operand {
         Operand::Bool(bool)
     }
-    
+
+    /// Gets the data type of the operand.
     pub fn dtype(&self) -> OperandType {
         match self {
             Operand::Float(_) => OperandType::Float,
@@ -57,7 +71,19 @@ impl Operand {
             Operand::Bool(_) => OperandType::Bool,
         }
     }
-    
+
+    /// Up-casts self to the correct OperandType based on self.dtype() and other.
+    ///
+    /// Up-casting basically means resolving a difference between two data types such that
+    /// they are the same. Currently, Float is King, so if you provide a bool/int with a float,
+    /// the up-casted data type will be a float. In order of priority, Float is King, Int is second
+    /// priority, and Bool has the least priority.
+    ///
+    /// # Arguments
+    /// * other: The data type of the other operand.
+    ///
+    /// # Returns
+    /// Self but up-casted to the correct data type based on other.
     pub fn resulting_value(&self, other: &OperandType) -> Operand {
         match self.dtype().resulting_type(other) {
             OperandType::Float => match self {
