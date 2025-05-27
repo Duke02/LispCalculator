@@ -3,6 +3,7 @@ use crate::functors::divide::Divide;
 use crate::functors::multiply::Multiply;
 use crate::functors::subtract::Subtract;
 use crate::functors::Functor;
+use crate::functors::modulus::Modulus;
 use crate::global_state::GlobalState;
 use crate::operand::Operand;
 use crate::result::{CalcError, CalcResult};
@@ -24,6 +25,7 @@ impl Calculator {
                 Box::new(Subtract::new()),
                 Box::new(Multiply::new()),
                 Box::new(Divide::new()),
+                Box::new(Modulus::new()),
             ],
         }
     }

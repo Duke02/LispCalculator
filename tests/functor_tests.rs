@@ -118,4 +118,27 @@ mod tests {
         let s = "(/ 2)";
         assert!(calc.process(s).is_err());
     }
+    
+    #[test]
+    fn test_modulus() {
+        let mut calc = Calculator::new();
+        
+        let s = "(% 1 2)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Int(1));
+        
+        let s = "(% 2 1)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Int(0));
+        
+        let s = "(% -1 2)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Int(-1));
+        
+        let s = "(% 3.5 1.0)";
+        assert!(calc.process(s).is_err());
+        
+        let s = "(% 3 1 2)";
+        assert!(calc.process(s).is_err());
+        
+        let s = "(% 3)";
+        assert!(calc.process(s).is_err());
+    }
 }

@@ -19,6 +19,7 @@ fn main() {
         "(* 1.1 2)",
         "(/ 1 1)",
         "(/ 1 2)",
+        "(% 2 3)"
     ];
 
     for s in quick_test_strings {
