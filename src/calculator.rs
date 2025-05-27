@@ -1,7 +1,8 @@
 use crate::functors::add::Add;
-use crate::functors::Functor;
+use crate::functors::divide::Divide;
 use crate::functors::multiply::Multiply;
 use crate::functors::subtract::Subtract;
+use crate::functors::Functor;
 use crate::global_state::GlobalState;
 use crate::operand::Operand;
 use crate::result::{CalcError, CalcResult};
@@ -18,7 +19,12 @@ impl Calculator {
     pub fn new() -> Self {
         Self {
             global_state: GlobalState::new(),
-            operators: vec![Box::new(Add::new()), Box::new(Subtract::new()), Box::new(Multiply::new())],
+            operators: vec![
+                Box::new(Add::new()),
+                Box::new(Subtract::new()),
+                Box::new(Multiply::new()),
+                Box::new(Divide::new()),
+            ],
         }
     }
 
@@ -61,7 +67,10 @@ impl Calculator {
         if innermost.is_empty() {
             None
         } else {
-            let &(_depth, start, end) = innermost.iter().max_by_key(|(c, _s, _e)| *c).expect("Check above did not work.");
+            let &(_depth, start, end) = innermost
+                .iter()
+                .max_by_key(|(c, _s, _e)| *c)
+                .expect("Check above did not work.");
             let innermost_statement = s[start..(end + 1)].to_string();
             Some((innermost_statement, start, end + 1))
         }
@@ -77,12 +86,15 @@ impl Calculator {
                 return Some(op);
             }
         }
-        None 
+        None
     }
 
     /// Parses the operands from the non-nested statement.
     pub fn parse_operands(&self, statement: &str) -> Vec<Operand> {
-        statement[1..statement.len() - 1].split(" ").filter_map(|po| Operand::try_from(po).ok()).collect::<Vec<_>>()
+        statement[1..statement.len() - 1]
+            .split(" ")
+            .filter_map(|po| Operand::try_from(po).ok())
+            .collect::<Vec<_>>()
     }
 
     /// Processes the full, possibly nested input string and gets the final result of its operations.
@@ -105,11 +117,13 @@ impl Calculator {
                 match functor.perform_operation(operands) {
                     Ok(result) => {
                         s = s.replace(statement.as_str(), result.to_string().as_str());
-                    },
+                    }
                     Err(e) => return Err(e),
                 }
             } else {
-                return Err(CalcError::InvalidOperator {provided: statement});
+                return Err(CalcError::InvalidOperator {
+                    provided: statement,
+                });
             }
         }
         Ok(Operand::try_from(s.as_str())?)

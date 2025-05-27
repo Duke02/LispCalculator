@@ -1,6 +1,7 @@
 use crate::functors::Functor;
 use crate::operand::{Operand, OperandType};
 
+/// Allows for multiplication for the calculator.
 pub struct Multiply {}
 
 impl Multiply {

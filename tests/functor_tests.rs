@@ -16,6 +16,15 @@ mod tests {
         let s = "(+ -1 2)";
         assert_eq!(calc.process(s).unwrap(), Operand::Int(1));
         
+        let s = "(+ 1.5 2.0)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Float(3.5));
+        
+        let s = "(+ 1 2.5)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Float(3.5));
+        
+        let s = "(+ 1.5 2)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Float(3.5));
+        
         let s = "(+ 1 2 3)";
         assert!(calc.process(s).is_err());
         
@@ -38,6 +47,15 @@ mod tests {
         
         let s = "(- 5 -1)";
         assert_eq!(calc.process(s).unwrap(), Operand::Int(6));
+        
+        let s = "(- 2.5 1.0)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Float(1.5));
+        
+        let s = "(- 5 4.5)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Float(0.5));
+        
+        let s = "(- 5.5 5)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Float(0.5));
         
         let s = "(- 1)";
         assert!(calc.process(s).is_err());
@@ -66,6 +84,38 @@ mod tests {
         assert!(calc.process(s).is_err());
         
         let s = "(* 1 1 1)";
+        assert!(calc.process(s).is_err());
+    }
+    
+    #[test]
+    fn test_division() {
+        let mut calc = Calculator::new();
+        
+        let s = "(/ 1 1)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Int(1));
+        
+        let s = "(/ 1 2)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Int(0));
+        
+        let s = "(/ -4 2)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Int(-2));
+        
+        let s = "(/ 2 -1)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Int(-2));
+        
+        let s = "(/ 3.5 1.4)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Float(2.5));
+        
+        let s = "(/ 2.5 1)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Float(2.5));
+        
+        let s = "(/ 4.9 0.8)";
+        assert_eq!(calc.process(s).unwrap(), Operand::Float(6.125));
+        
+        let s = "(/ 2 0.5 0.5)";
+        assert!(calc.process(s).is_err());
+        
+        let s = "(/ 2)";
         assert!(calc.process(s).is_err());
     }
 }
