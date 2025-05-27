@@ -44,7 +44,8 @@ mod tests {
 
         // TODO: Change this when we've added subtraction.
         let s = "(- 1 2)";
-        assert!(calc.get_functor(s).is_none());
+        assert!(calc.get_functor(s).is_some());
+        assert_eq!(calc.get_functor(s).unwrap().get_operator(), "-".to_string());
 
         let s = "(max 1 2)";
         assert!(calc.get_functor(s).is_none());
@@ -86,16 +87,15 @@ mod tests {
         let s = "(+ 1.1 2.0)";
         assert_eq!(calc.process(s).unwrap(), Operand::Float(3.1));
 
+        let s = "(- 1 (+ 2 3))";
+        assert_eq!(calc.process(s).unwrap(), Operand::Int(-4));
+        
         // Error due to non-closed parentheses
         let s = "(+ 1 2";
         assert!(calc.process(s).is_err());
 
         // Invalid num operands
         let s = "(+ 1 (+ 2 3 4))";
-        assert!(calc.process(s).is_err());
-
-        // Unsupported operation
-        let s = "(- 1 (+ 2 3))";
         assert!(calc.process(s).is_err());
 
         // Invalid num operands

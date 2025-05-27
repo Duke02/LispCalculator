@@ -1,5 +1,6 @@
 use crate::functors::add::Add;
 use crate::functors::Functor;
+use crate::functors::subtract::Subtract;
 use crate::global_state::GlobalState;
 use crate::operand::Operand;
 use crate::result::{CalcError, CalcResult};
@@ -13,7 +14,7 @@ impl Calculator {
     pub fn new() -> Self {
         Self {
             global_state: GlobalState::new(),
-            operators: vec![Box::new(Add::new())],
+            operators: vec![Box::new(Add::new()), Box::new(Subtract::new())],
         }
     }
 
