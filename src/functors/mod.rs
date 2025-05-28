@@ -1,8 +1,5 @@
+pub mod basic_math;
 pub mod functor;
-pub mod add;
-pub mod subtract;
-pub mod multiply;
-pub mod divide;
-pub mod modulus;
+pub mod boolean_ops;
 
 pub use functor::Functor;

@@ -1,9 +1,10 @@
-use crate::functors::add::Add;
-use crate::functors::divide::Divide;
-use crate::functors::multiply::Multiply;
-use crate::functors::subtract::Subtract;
+use crate::functors::basic_math::add::Add;
+use crate::functors::basic_math::divide::Divide;
+use crate::functors::basic_math::multiply::Multiply;
+use crate::functors::basic_math::subtract::Subtract;
 use crate::functors::Functor;
-use crate::functors::modulus::Modulus;
+use crate::functors::basic_math::modulus::Modulus;
+use crate::functors::boolean_ops::and::And;
 use crate::global_state::GlobalState;
 use crate::operand::Operand;
 use crate::result::{CalcError, CalcResult};
@@ -26,6 +27,7 @@ impl Calculator {
                 Box::new(Multiply::new()),
                 Box::new(Divide::new()),
                 Box::new(Modulus::new()),
+                Box::new(And::new()),
             ],
         }
     }

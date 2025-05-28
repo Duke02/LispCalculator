@@ -81,7 +81,7 @@ Is it efficient? Probably not tbh.
 * Add `set` operator for creating variables
   * Will require me to modify the `Operand` enum to support variables. 
     * Maybe...
-* Add modulus, and boolean operators.
+* Add boolean operators.
 
 Keep in mind this list might be out of date. 
 
