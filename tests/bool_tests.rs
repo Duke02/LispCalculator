@@ -1,7 +1,7 @@
 mod tests {
     use lisp_calculator::calculator::Calculator;
     use lisp_calculator::operand::Operand;
-    use super::*;
+    
     
     #[test]
     fn test_and() {
