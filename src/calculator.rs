@@ -1,3 +1,4 @@
+use crate::functors::boolean_ops::or::Or;
 use crate::functors::basic_math::add::Add;
 use crate::functors::basic_math::divide::Divide;
 use crate::functors::basic_math::multiply::Multiply;
@@ -28,6 +29,7 @@ impl Calculator {
                 Box::new(Divide::new()),
                 Box::new(Modulus::new()),
                 Box::new(And::new()),
+                Box::new(Or::new()),
             ],
         }
     }
