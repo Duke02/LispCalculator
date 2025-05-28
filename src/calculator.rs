@@ -11,12 +11,15 @@ use crate::functors::Functor;
 use crate::global_state::GlobalState;
 use crate::operand::Operand;
 use crate::result::{CalcError, CalcResult};
+use crate::state_logic::change_tolerance::ChangeTolerance;
+use crate::state_logic::StateChanger;
 
 /// The actual reason for this repo's existence - the Calculator.
 pub struct Calculator {
     global_state: GlobalState,
     /// The supported operators for the Calculator
     operators: Vec<Box<dyn Functor>>,
+    state_changers: Vec<Box<dyn StateChanger>>,
 }
 
 impl Calculator {
@@ -35,6 +38,7 @@ impl Calculator {
                 Box::new(GreaterThan::new()),
                 Box::new(LessThan::new()),
             ],
+            state_changers: vec![Box::new(ChangeTolerance::new())],
         }
     }
 
@@ -99,6 +103,15 @@ impl Calculator {
         None
     }
 
+    pub fn get_state_changer(&self, statement: &str) -> Option<&Box<dyn StateChanger>> {
+        for op in &self.state_changers {
+            if op.can_change_state(statement) {
+                return Some(op);
+            }
+        }
+        None
+    }
+
     /// Parses the operands from the non-nested statement.
     pub fn parse_operands(&self, statement: &str) -> Vec<Operand> {
         statement[1..statement.len() - 1]
@@ -128,6 +141,12 @@ impl Calculator {
                     Ok(result) => {
                         s = s.replace(statement.as_str(), result.to_string().as_str());
                     }
+                    Err(e) => return Err(e),
+                }
+            } else if let Some(state_changer) = self.get_state_changer(statement.as_str()) {
+                let operands = self.parse_operands(statement.as_str());
+                match state_changer.change_state(&self.global_state, &operands) {
+                    Ok(new_state) => self.global_state = new_state,
                     Err(e) => return Err(e),
                 }
             } else {

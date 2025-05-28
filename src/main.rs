@@ -5,6 +5,7 @@ mod functors;
 mod global_state;
 mod operand;
 mod result;
+mod state_logic;
 
 fn main() {
     let mut calc = Calculator::new();
