@@ -1,13 +1,13 @@
-use std::cmp::Ordering::Greater;
-use crate::functors::boolean_ops::or::Or;
 use crate::functors::basic_math::add::Add;
 use crate::functors::basic_math::divide::Divide;
+use crate::functors::basic_math::modulus::Modulus;
 use crate::functors::basic_math::multiply::Multiply;
 use crate::functors::basic_math::subtract::Subtract;
-use crate::functors::Functor;
-use crate::functors::basic_math::modulus::Modulus;
 use crate::functors::boolean_ops::and::And;
 use crate::functors::boolean_ops::greater_than::GreaterThan;
+use crate::functors::boolean_ops::less_than::LessThan;
+use crate::functors::boolean_ops::or::Or;
+use crate::functors::Functor;
 use crate::global_state::GlobalState;
 use crate::operand::Operand;
 use crate::result::{CalcError, CalcResult};
@@ -33,6 +33,7 @@ impl Calculator {
                 Box::new(And::new()),
                 Box::new(Or::new()),
                 Box::new(GreaterThan::new()),
+                Box::new(LessThan::new()),
             ],
         }
     }
